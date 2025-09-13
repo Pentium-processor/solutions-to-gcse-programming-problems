@@ -1,7 +1,6 @@
 dice_numbers=list(range(1,7,1))
 player_1_score=[]
 player_2_score=[]
-count=0
 def create_winner_file():
     
     with open("winners.txt","a") as a: 
@@ -10,7 +9,6 @@ def create_winner_file():
       else:
          a.write(f'\nplayer 2:{player_2_username}')
 open_txt_file=open("winners.txt","r")
-count=len(open_txt_file.readlines())
 player_1_username=input('player 1 username:')
 time.sleep(1)
 player_2_username=input('player 2 username:')
@@ -84,3 +82,4 @@ else:
          print(f'{player_2_username} wins!')
         
 create_winner_file()
+
