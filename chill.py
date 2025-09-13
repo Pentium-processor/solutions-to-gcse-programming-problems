@@ -1,3 +1,5 @@
+#task 1
+'''
 dice_numbers=list(range(1,7,1))
 player_1_score=[]
 player_2_score=[]
@@ -81,5 +83,54 @@ else:
         elif sum(player_2_score)>sum(player_1_score):
          print(f'{player_2_username} wins!')
         
-create_winner_file()
+create_winner_file()'''
+#task 2
+'''
+import time 
+import random 
+open_txt_file=open('mylines.txt','r')
+song_names_and_artists=[]
+player_score=0
+tries=1
+for song in open_txt_file.readlines():
+  song_names_and_artists.append(song)
+else:
+    username=input('Username:')
+    while song_names_and_artists!=[]:
+        random_song_name=random.choice(song_names_and_artists)
+        song_name_with_artist=random_song_name[0][0]+' '+random_song_name[1][0]
+        time.sleep(1)
+        print(song_name_with_artist)
+        time.sleep(1)
+        guess_song_name=input('Guess the song name:') 
+        if guess_song_name==random_song_name[:random_song_name.index("-")]:
+            print('Correct')
+            player_score+=3 
+            if random_song_name==song_names_and_artists[0][0]:
+                del song_names_and_artists[0]
+            elif random_song_name==song_names_and_artists[1][0]:
+                del song_names_and_artists[1]
+            elif random_song_name==song_names_and_artists[2][0]:
+                del song_names_and_artists[2]
+        while guess_song_name!=random_song_name[:random_song_name.index("-")]:
+            print('Incorrect')
+            tries+=1
+            time.sleep(1)
+            guess_song_name=input('Guess the song name:')
+            if guess_song_name==random_song_name[0] and tries==2:
+                tries-=1 
+                player_score+=1
+                time.sleep(1) 
+                print('Correct')
+                break 
+            else:
+                exit('game over'.upper())
+    else:
+     with open('player_score.txt','a') as a: 
+         a.write(username+'-'+str(player_score))
+         a.write('\n') 
+         open_text_file=open('player_score.txt','r')
+         print(username+"\'s"+' Highscore:',player_score)
 
+
+'''
