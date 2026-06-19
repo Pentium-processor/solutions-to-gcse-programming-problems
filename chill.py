@@ -1,136 +1,100 @@
-#task 1
-'''
-dice_numbers=list(range(1,7,1))
-player_1_score=[]
-player_2_score=[]
-def create_winner_file():
-    
-    with open("winners.txt","a") as a: 
-      if sum(player_1_score)>sum(player_2_score):
-         a.write(f'\nplayer 1:{player_1_username}')
-      else:
-         a.write(f'\nplayer 2:{player_2_username}')
-open_txt_file=open("winners.txt","r")
-player_1_username=input('player 1 username:')
-time.sleep(1)
-player_2_username=input('player 2 username:')
-def player_1_turn():
-    
-    roll_first_dice=input("Press enter to roll the first dice:")
-    print('Player 1 rolls the first dice.')
-    time.sleep(0.01)
-    print(first_dice)
-    time.sleep(0.01)
-    roll_second_dice=input("Press enter to roll the second dice:")
-    print('PLayer 1 rolls the second dice.')
-    time.sleep(0.01)
-    print(second_dice)
-    time.sleep(0.01)
-    if total%2==0:
-        player_1_score.append(total+10)
-    else:
-        player_1_score.append(total-5)
-def player_2_turn():
-    roll_first_dice=input("Press enter to roll the first dice:")
-    print('Player 2 rolls the first dice.')
-    time.sleep(0.01)
-    print(first_dice)
-    time.sleep(0.01)
-    roll_second_dice=input("Press enter to roll the second dice:")
-    print('PLayer 2 rolls the second dice.')
-    time.sleep(0.01)
-    print(second_dice)
-    if total_1%2==0:
-        player_2_score.append(total_1+10)
-    else:
-        player_2_score.append(total_1-5)
-for n in range(5):
-    first_dice=random.choice(dice_numbers)
-    second_dice=random.choice(dice_numbers)
-    player_2_first_dice=random.choice(dice_numbers)
-    player_2_second_dice=random.choice(dice_numbers)
-    total=first_dice+second_dice
-    total_1=player_2_first_dice+player_2_second_dice
-    player_1_turn()
-    player_2_turn()
-else:
-    print('player 1 score:',sum(player_1_score))
-    print('player 2 score:',sum(player_2_score))
-    if sum(player_1_score)>sum(player_2_score):
-        print('Player 1 wins!')
-    elif sum(player_2_score)>sum(player_1_score):
-        print('Player 2 wins!')
-    elif sum(player_2_score)==sum(player_1_score):
-        random_dice=random.choice(['first dice','second dice'])
-        roll_last_die=input(f"press enter to roll your last dice {player_1_username}:")
-        print('Player 1 rolls the ',random_dice)
-        if random_dice=='first dice':
-            player_1_score.append(first_dice)
-        elif random_dice=='second dice':
-            player_1_score.append(second_dice)
-        time.sleep(1)
-        roll_last_die=input(f"press enter to roll your last dice {player_2_username}:")
-        print('Player 2 rolls the ',random_dice)
-        if random_dice=='first dice':
-            player_2_score.append(player_2_first_dice)
-        elif random_dice=='second dice':
-            player_2_score.append(player_2_second_dice)
-        time.sleep(1)
-        print('player 1 score:',sum(player_1_score))
-        print('player 2 score:',sum(player_2_score))
-        if sum(player_1_score)>sum(player_2_score):
-         print(f'{player_1_username} wins!')
-        elif sum(player_2_score)>sum(player_1_score):
-         print(f'{player_2_username} wins!')
-        
-create_winner_file()'''
-#task 2
-'''
-import time 
-import random 
-open_txt_file=open('mylines.txt','r')
-song_names_and_artists=[]
-player_score=0
-tries=1
-for song in open_txt_file.readlines():
-  song_names_and_artists.append(song)
-else:
-    username=input('Username:')
-    while song_names_and_artists!=[]:
-        random_song_name=random.choice(song_names_and_artists)
-        song_name_with_artist=random_song_name[0][0]+' '+random_song_name[1][0]
-        time.sleep(1)
-        print(song_name_with_artist)
-        time.sleep(1)
-        guess_song_name=input('Guess the song name:') 
-        if guess_song_name==random_song_name[:random_song_name.index("-")]:
-            print('Correct')
-            player_score+=3 
-            if random_song_name==song_names_and_artists[0][0]:
-                del song_names_and_artists[0]
-            elif random_song_name==song_names_and_artists[1][0]:
-                del song_names_and_artists[1]
-            elif random_song_name==song_names_and_artists[2][0]:
-                del song_names_and_artists[2]
-        while guess_song_name!=random_song_name[:random_song_name.index("-")]:
-            print('Incorrect')
-            tries+=1
-            time.sleep(1)
-            guess_song_name=input('Guess the song name:')
-            if guess_song_name==random_song_name[0] and tries==2:
-                tries-=1 
-                player_score+=1
-                time.sleep(1) 
-                print('Correct')
-                break 
-            else:
-                exit('game over'.upper())
-    else:
-     with open('player_score.txt','a') as a: 
-         a.write(username+'-'+str(player_score))
-         a.write('\n') 
-         open_text_file=open('player_score.txt','r')
-         print(username+"\'s"+' Highscore:',player_score)
+import subprocess
+from bs4 import BeautifulSoup
+import curses
+import requests
+import blessed
+from time import sleep
+term=blessed.Terminal()
+headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+         "Connection":"Keep-Alive"}
+r=requests.get("https://www.bbc.co.uk/news/technology",headers=headers)
+sleep(5)
+with open("headlines.html","w",encoding="UTF-8")as a:
+    a.write(str(r.text))
 
+open_html_file=open("headlines.html","r")
+headline_parser=BeautifulSoup(open_html_file,"html.parser")
+links=[]
+url_prefix="https://www.bbc.co.uk/"
+headlines=[]
+for headline in headline_parser.find_all("span"):
+    text=headline.get("aria-hidden")
+    if text=="false":
+       headlines.append(headline.string.strip())
+    else:
+       continue
+for headline in headline_parser.find_all("a"):
+    headline_page=headline.get("href")
+    if "/news/articles" in str(headline_page) and str(headline_page).endswith("#comments")==False:
+     links.append(url_prefix+str(headline_page))
+    else:
+      pass
 
+headlines=headlines[:5]
+links=links[:5]
+n=0
+for url  in links:
+  n+=1
+  url_req=requests.get(url)
+  with open(f"{n}_news.html","w") as a:
+    a.write(str(url_req.text))
+  open_html_file=open(f"{n}_news.html","r")
+  news_page_reader=BeautifulSoup(open_html_file,"html.parser")
+  with open(f"{n}_news.txt","w") as a:
+    for char in news_page_reader.find_all("p"):
+        a.write(str(char.string))
 '''
+def create_curses_application(stdscr):
+    curses.start_color()
+    curses.init_pair(1,curses.COLOR_BLACK,curses.COLOR_GREEN)
+    curses.init_pair(2,curses.COLOR_BLACK,curses.COLOR_WHITE)
+    curses.curs_set(0)
+    curses.cbreak(True)
+    stdscr.keypad(True)
+    pos=1
+    stdscr.addstr(0,0,"Today\'s Tech News Headlines:",curses.A_BLINK)
+    while True:
+     for index,headline in enumerate(headlines,start=1):
+         if index==pos:
+            stdscr.addstr(pos,0,headline,curses.color_pair(1))
+         else:
+            stdscr.addstr(index,0,headline,curses.color_pair(2))
+     detect_key=stdscr.getch()
+     if detect_key==ord("q"):
+        exit("")
+     elif detect_key==curses.KEY_DOWN and pos<6:
+         pos+=1
+     elif detect_key==curses.KEY_UP and pos>1:
+         pos-=1
+     elif detect_key==curses.KEY_DOWN and pos==6:
+         pos-=5
+     elif detect_key==curses.KEY_UP and pos==1:
+         pos+=5
+'''
+def news_headlines_dashboard():
+    pos=0
+    while True:
+     with term.fullscreen(),term.cbreak(),term.hidden_cursor():
+       print(term.cyan_underline_bold_dim+"Today\'s Tech News Headlines\n-------------------------------".center(20))
+       for index,headline in enumerate(headlines):
+        if index==pos:
+           term.move_x(term.width//2)
+           print(term.reverse_green+term.link(links[pos],headline))
+        else:
+           term.move_y(index)
+           print(term.reverse_white+headline)
+
+       key=term.inkey()
+       if key=="q":
+        break
+       elif key.name=="KEY_DOWN" and pos<5:
+           pos+=1
+       elif key.name=="KEY_UP" and pos>0:
+           pos-=1
+       elif key.name=="KEY_UP" and pos==0:
+           pos+=5
+       elif key.name=="KEY_DOWN" and pos==5:
+           pos-=5
+
+if __name__=="__main__":
+   news_headlines_dashboard()
